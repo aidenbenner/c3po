@@ -9,6 +9,8 @@
 static const int NUM_POSTS = 5;
 static const int NUM_SUBREDDITS = 3;
 static char *SUBREDDITS[] = { "worldnews", "jokes", "quotes" };
+static const size_t BUFFER_SIZE = 128;
+static const size_t REDDIT_BUFFER_SIZE = 2056;
 
 User *g_user;
 Date *g_date;
@@ -55,7 +57,7 @@ User * update_user (User *user)
   }
 
   Serial.println ("GET_INFO:NULL");
-  char *buffer = serial_readline ();
+  char *buffer = serial_readline (BUFFER_SIZE);
 
   json_buffer *jb = parse_json (buffer);
 
@@ -76,7 +78,7 @@ Date * update_date (Date *date)
     free (date);
 
   Serial.println ("GET_DATE:NULL");
-  char *tmp, **end, *buffer = serial_readline ();
+  char *tmp, **end, *buffer = serial_readline (BUFFER_SIZE);
 
   json_buffer *jb = parse_json (buffer);
   date = (Date *) malloc (sizeof (Date));
@@ -128,7 +130,7 @@ Weather * update_weather (Weather *weather)
   }
 
   Serial.println ("GET_WEATHER:ca:waterloo");
-  char *buffer = serial_readline ();
+  char *buffer = serial_readline (BUFFER_SIZE);
 
   json_buffer *jb = parse_json (buffer);
 
@@ -171,7 +173,7 @@ Subreddit * update_subreddit (Subreddit *subreddit, char *name)
   Serial.print (":");
   Serial.println (NUM_POSTS);
 
-  char *buffer = serial_readline ();
+  char *buffer = serial_readline (REDDIT_BUFFER_SIZE);
   json_buffer *jb = parse_json (buffer);
 
   subreddit = (Subreddit *) malloc (sizeof (Subreddit));
