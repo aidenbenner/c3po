@@ -3,27 +3,25 @@
  */
 
 #include <Energia.h>
-#include <string.h> 
+#include <string.h>
 #include <stdlib.h>
 #include "serial.h"
 #include "utils.h"
-
-static const int BUFFER_MAX = 2048;
 
 void serial_init ()
 {
   Serial.begin (9600);
 }
 
-char * serial_readline (void)
+char * serial_readline (size_t serial_size)
 {
-  char *buffer = (char *) malloc (sizeof (char) * BUFFER_MAX);
-  memset (buffer, '\0', BUFFER_MAX);
+  char *buffer = (char *) malloc (sizeof (char) * serial_size);
+  memset (buffer, '\0', serial_size);
 
   char c;
   int count = 0;
 
-  while (count < BUFFER_MAX - 1)
+  while (count < serial_size - 1)
   {
     if (Serial.available ())
     {
